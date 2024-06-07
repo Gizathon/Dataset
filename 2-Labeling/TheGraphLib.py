@@ -59,7 +59,7 @@ burn_query_template = '''
 def run_query(query):
 
     # endpoint where you are making the request
-    request = requests.post('https://gateway-arbitrum.network.thegraph.com/api/30f67c1ef7d30ea143e6aab98a97703b/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum',
+    request = requests.post('https://gateway-arbitrum.network.thegraph.com/api/829116bfdd9d51f6394344cac20289b0/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum',
                             json={'query': query})
     if request.status_code == 200:
         return request.json()
@@ -74,7 +74,7 @@ def call_theGraph_mint(pair_id):
         query = mint_query_template % (pair_id,timestamp)
         result = run_query(query)
 
-        if(len(result['data']['mints']) < 1000): # 1000개 미만이니까 끝낸다.
+        if(len(result['data']['mints']) < 1000): 
           mint_array.extend(result['data']['mints'])
           break
 
@@ -94,7 +94,7 @@ def call_theGraph_swap(pair_id):
         query = swap_query_template % (pair_id,timestamp)
         result = run_query(query)
 
-        if(len(result['data']['swaps']) < 1000): # 1000개 미만이니까 끝낸다.
+        if(len(result['data']['swaps']) < 1000): 
           swap_array.extend(result['data']['swaps'])
           break
 
@@ -114,7 +114,7 @@ def call_theGraph_burn(pair_id):
         query = burn_query_template % (pair_id,timestamp)
         result = run_query(query)
 
-        if(len(result['data']['burns']) < 1000): # 1000개 미만이니까 끝낸다.
+        if(len(result['data']['burns']) < 1000): 
           burn_array.extend(result['data']['burns'])
           break
 
@@ -131,13 +131,13 @@ def call_theGraph_burn(pair_id):
 def get_creatorAddress(pair_id,token_id):
     repos_url = 'https://api.ethplorer.io/getAddressInfo/'+token_id+'?apiKey=EK-4L18F-Y2jC1b7-9qC3N'
     response = requests.get(repos_url).text
-    repos = json.loads(response)    #json 형태로 token_id에 해당하는 정보를 불러온다.
+    repos = json.loads(response)    
     
     try:
         creator_address = repos['contractInfo']['creatorAddress']
         if(creator_address == None):
           raise ValueError
-    except:     #오류가 나면 이더스캔에서 크롤링
+    except:     
          url = 'https://etherscan.io/address/'+token_id
          try:
              response = requests.get(url,headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36'})
@@ -148,7 +148,7 @@ def get_creatorAddress(pair_id,token_id):
                 query = mint_query_first % pair_id
                 response = run_query(query)
                 creator_address = response['data']['mints'][0]['to']
-         except Exception as e:  #이더스캔 크롤링까지 에러나면 'Error'로 표시
+         except Exception as e:  
               print(e)
               creator_address = 'Fail to get Creator Address'
     
@@ -164,5 +164,5 @@ def get_holders(token_id):
     response = requests.get(repos_url)
     if(response.status_code == 400):
         return []
-    repos = json.loads(response.text)    #json 형태로 token_id에 해당하는 정보를 불러온다.
+    repos = json.loads(response.text)    
     return repos['holders']

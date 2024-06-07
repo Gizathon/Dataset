@@ -26,7 +26,7 @@ def merge_csv():
   input_file = r'./result/'
   output_file = r'./result/result'
 
-  allFile_list = glob.glob(os.path.join(input_file, 'fout*')) # glob함수로 sales_로 시작하는 파일들을 모은다
+  allFile_list = glob.glob(os.path.join(input_file, 'fout*')) 
   allFile_list.sort()
   for file in allFile_list:
       output_file = output_file + file[-5] 

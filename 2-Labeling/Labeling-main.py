@@ -14,25 +14,24 @@ def switch_file(file_name):
     datas = pd.read_csv(file_name).to_dict('records')
 
 def get_feature(data):
-    #하나의 데이터 pair에 대해서 피처들 다 추가한다.
-    #여기에서 data['feat1'] = feat1 , data['feat2'] = feat2 ... 추가. 각각의 피처를 구하는 함수는 따로 구현
+    
     pair_address = data['id']
     token_address = data['token00.id']
 
-    #TheGraph API를 이용해서 하나의 페어에 대한 쌍들을 전부 메모리에 올려놓고. 시작
+    #TheGraph API
     mint_data_transaction = call_theGraph_mint(pair_address)
     swap_data_transaction = call_theGraph_swap(pair_address)
     burn_data_transaction = call_theGraph_burn(pair_address)
 
-    #initial_Liquidity 의 이더와 토큰 구하기
+    #initial_Liquidity 
     initial_Liquidity_Eth , initial_Liquidity_Token = get_initial_Liquidity(data['token0.symbol'],mint_data_transaction)
 
-    # 각각의 count 구하기
+    
     mint_count = len(mint_data_transaction)
     swap_count = len(swap_data_transaction)
     burn_count = len(burn_data_transaction)
 
-    # Mint/Burn/Swap의 Active Period 상의 분포 
+    # Mint/Burn/Swap
     initial_timestamp = int(mint_data_transaction[0]['timestamp'])
     last_timestamp = get_last_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction)
     active_period = last_timestamp - initial_timestamp
@@ -40,13 +39,13 @@ def get_feature(data):
     swap_mean_period = int(get_swap_mean_period(swap_data_transaction,initial_timestamp))
     burn_mean_period = int(get_burn_mean_period(burn_data_transaction,initial_timestamp))
     
-    #SwapIn/SwapOut 비율
+    #SwapIn/SwapOut 
     swapIn,swapOut = swap_IO_rate(swap_data_transaction,token_index(data))    
 
-    #rugpull timestamp , 러그풀 시점에서 유동성 풀에 있는 이더 변화량(rugpull timestamp / change)
+    #rugpull timestamp 
     rugpull_timestamp, rugpull_change, is_rugpull, before_rugpull_Eth, after_rugpull_Eth,rugpull_method = get_rugpull_timestamp(mint_data_transaction,swap_data_transaction,burn_data_transaction,token_index(data))
 
-    #rugpull 이 시작부터 끝날때까지 경과한 시간
+    #rugpull
     rugpull_proceeding_time = int(rugpull_timestamp) - int(initial_timestamp)
     if(is_rugpull == False):
         rugpull_proceeding_time = 0
