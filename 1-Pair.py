@@ -25,7 +25,7 @@ def switch_token(result):
 # function to use requests.post to make an API call to the subgraph url
 def run_query(query):
     # endpoint where you are making the request
-    request = requests.post('https://gateway-arbitrum.network.thegraph.com/api/30f67c1ef7d30ea143e6aab98a97703b/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum',
+    request = requests.post('https://gateway-arbitrum.network.thegraph.com/api/829116bfdd9d51f6394344cac20289b0/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum',
                             json={'query': query})
     if request.status_code == 200:
         return request.json()
@@ -35,7 +35,7 @@ def run_query(query):
 
 query_init = '''
 {
- pairs(first: 1000, orderBy: createdAtBlockNumber, orderDirection: desc) {
+ pairs(first: 10, orderBy: createdAtBlockNumber, orderDirection: desc) {
    id
    token0{
     id
@@ -59,6 +59,7 @@ query_init = '''
    txCount
    createdAtTimestamp
    createdAtBlockNumber
+   createrAddress
  }
 }
 '''
@@ -134,6 +135,7 @@ if 'data' in result and 'pairs' in result['data']:
                 pair_frame.append(pair)
             last_block = result['data']['pairs'][-1]['createdAtBlockNumber']
             query_iter = query_iter_template.replace('initial', last_block)
+            break
 
     except Exception as e:
         try:
@@ -141,6 +143,6 @@ if 'data' in result and 'pairs' in result['data']:
         except:
             print(e)
         df = pd.json_normalize(pair_frame)
-        df.to_csv('main_pair.csv', encoding='utf-8-sig', index=False)
+        df.to_csv('temp.csv', encoding='utf-8-sig', index=False)
 else:
     print("Initial query returned no data or pairs:", result)
