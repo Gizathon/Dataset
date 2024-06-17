@@ -1,56 +1,79 @@
-Rugpull Prediction Dataset Preparation
-Overview
-This project is designed to collect and process data for the purpose of predicting rugpull events in cryptocurrency markets. The dataset is built by querying blockchain data using The Graph protocol and processing it to ensure scam tokens are correctly identified and normalized.
+# Rugpull Prediction Dataset Preparation
 
-Pair.py
-Contents
-switch_token(result): A function to ensure scam tokens are consistently marked as token0.
-run_query(query): A function to execute GraphQL queries against The Graph endpoint.
-GraphQL queries to fetch pair data from a specified subgraph.
-Data collection loop to iterate through all available pairs and process them.
-Data normalization and saving to CSV.
-Requirements
-Python 3.6 or higher
-Required Python packages:
-requests
-pandas
-beautifulsoup4
-Install the required packages using pip:
+Welcome to the Rugpull Prediction Dataset Preparation repository. This repository contains scripts to prepare the dataset for the main project on rugpull prediction. The project aims to identify potential rugpull scams in cryptocurrency projects by analyzing various data points.
 
-sh
-Copy code
-pip install requests pandas beautifulsoup4
-Functions
-switch_token(result)
-This function takes the result of a query and ensures that the token with more transactions is always listed as token0. This normalization helps in identifying scam tokens more consistently.
+## Repository Contents
 
-Parameters:
+This repository contains the following two main files:
 
-result (dict): The result from a GraphQL query containing token pair data.
-Returns:
+1. `1-pair.py`
+2. `Main_labelling.ipynb`
 
-None
-run_query(query)
-This function sends a GraphQL query to The Graph endpoint and returns the result.
+### `1-pair.py`
 
-Parameters:
+This script is responsible for the initial data collection and preprocessing. It pairs relevant data points from various sources to create a foundational dataset for further analysis.
 
-query (str): The GraphQL query to be executed.
-Returns:
+### `Main_labelling.ipynb`
 
-dict: The JSON response from the endpoint.
-Raises:
+This Jupyter Notebook is used to execute the data labeling process. It utilizes the dataset prepared by `1-pair.py` and applies various labeling techniques to categorize the data, making it ready for the rugpull prediction model.
 
-Exception: If the query fails or returns a status code other than 200.
-Usage
-The script is designed to be run as a standalone script. It initializes a query to fetch the latest token pairs, processes the results, and continues querying iteratively to gather more data.
+## Usage
 
-Initial Query
-The initial query (query_init) fetches the most recent token pairs. The results are processed to normalize token data using the switch_token function. Valid pairs (containing WETH tokens) are collected.
+Follow the steps below to get started with preparing your dataset:
 
-Iterative Queries
-An iterative query template (query_iter_template) is used to fetch additional pairs created before the last block number obtained in the previous query. This loop continues until no more valid pairs are found or an error occurs.
+### Prerequisites
 
-Data Storage
-Collected data is normalized and stored in a CSV file named temp.csv.
+Ensure you have the following installed:
+
+- Python 3.x
+- Jupyter Notebook
+- Required Python packages (listed in `requirements.txt`)
+
+### Installation
+
+1. Clone this repository to your local machine:
+
+   bash
+   git clone https://github.com/your-username/rugpull-prediction-dataset.git
+   cd rugpull-prediction-dataset
+   
+
+2. Install the required Python packages:
+
+   bash
+   pip install -r requirements.txt
+   
+
+### Data Preparation
+
+1. **Run `1-pair.py`:**
+
+   This script collects and preprocesses the data. Run the script using the command:
+
+   bash
+   python 1-pair.py
+   
+
+   Ensure the script completes without errors. This will create a foundational dataset required for the next step.
+
+2. **Execute `Main_labelling.ipynb`:**
+
+   Open the Jupyter Notebook `Main_labelling.ipynb` using the command:
+
+   bash
+   jupyter notebook Main_labelling.ipynb
+   
+
+   Follow the instructions within the notebook to label the dataset. The notebook will guide you through the labeling process, applying various techniques to categorize the data.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for any features, bug fixes, or improvements.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a pull request
+
 
