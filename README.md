@@ -44,28 +44,6 @@ Ensure you have the following installed:
    pip install -r requirements.txt
    
 
-### Data Preparation
-
-1. **Run `1-pair.py`:**
-
-   This script collects and preprocesses the data. Run the script using the command:
-
-   bash
-   python 1-pair.py
-   
-
-   Ensure the script completes without errors. This will create a foundational dataset required for the next step.
-
-2. **Execute `Main_labelling.ipynb`:**
-
-   Open the Jupyter Notebook `Main_labelling.ipynb` using the command:
-
-   bash
-   jupyter notebook Main_labelling.ipynb
-   
-
-   Follow the instructions within the notebook to label the dataset. The notebook will guide you through the labeling process, applying various techniques to categorize the data.
-
 ## Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any features, bug fixes, or improvements.
